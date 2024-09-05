@@ -1,6 +1,17 @@
  import * as THREE from 'three'
  import gsap from 'gsap'
 
+ //cursor
+ const cursor = {
+    x: 0,
+    y: 0
+ }
+ window.addEventListener('mousemove', (event) =>
+ {
+     cursor.x = event.clientX / sizes.width - 0.5
+     cursor.y = - (event.clientY / sizes.height - 0.5)
+ })
+
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 
@@ -26,10 +37,11 @@ const sizes = {
 /**
  * Camera
  */
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height)
+const camera = new THREE.PerspectiveCamera(75, sizes.width  / sizes.height, .1, 100)
+const aspectRatio = sizes.width / sizes.height
 camera.position.z = 3
+ camera.lookAt(mesh.position)
  scene.add(camera)
-
 /**
  * Renderer
  */
@@ -42,13 +54,18 @@ renderer.render(scene, camera)
  // time
  const clock = new THREE.Clock()
  // animations'
- gsap.to(mesh.position, { duration: 1, delay: 1, x: 2})
+
  const tick = () =>
  {
      //time
      const elapsedTime = clock.getElapsedTime()
      //update objects
-
+     //update camera
+     camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 3
+     camera.position.z = Math.cos(cursor.x * Math.PI * 2) * 3
+     camera.position.y = cursor.y * 5
+     camera.lookAt(mesh.position)
+     //mesh.rotation.y = elapsedTime
      // render
      renderer.render(scene,camera)
 
