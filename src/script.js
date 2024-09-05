@@ -26,7 +26,8 @@ const sizes = {
  * Camera
  */
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height)
-scene.add(camera)
+camera.position.z = 3
+ scene.add(camera)
 
 /**
  * Renderer
@@ -36,3 +37,23 @@ const renderer = new THREE.WebGLRenderer({
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.render(scene, camera)
+
+ // time
+ const clock = new THREE.Clock()
+ // animations
+ const tick = () =>
+ {
+     //time
+     const elapsedTime = clock.getElapsedTime()
+     //update objects
+     mesh.position.x = Math.sin(elapsedTime)
+     mesh.rotation.x = Math.sin(elapsedTime)
+     mesh.rotation.y = Math.cos(elapsedTime)
+
+     // render
+     renderer.render(scene,camera)
+
+     window.requestAnimationFrame(tick)
+ }
+
+ tick()
